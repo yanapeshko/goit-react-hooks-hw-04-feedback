@@ -1,0 +1,11 @@
+.box {
+  width: 300px;
+  padding: 10px 10px 10px 40px;
+  margin: 0;
+  border-radius: 4px;
+  background-color: #fff8f5;
+}
+
+.category {
+  font-size: 22px;
+}
