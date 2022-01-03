@@ -4,7 +4,7 @@ import Section from '../Section';
 import FeedbackOptions from '../FeedbackOptions';
 import Statistics from '../Statistics';
 import Notification from '../Notification';
-import './App.css';
+import './App.module.css';
 
 export default function App() {
   const [good, setGood] = useState(0);
