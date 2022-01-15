@@ -6,57 +6,40 @@ import Statistics from '../Statistics';
 import Notification from '../Notification';
 import './App.module.css';
 
+const initialState = { good: 0, neutral: 0, bad: 0 };
+
 export default function App() {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [state, setState] = useState({ ...initialState });
 
   const setStatistics = option => {
-    switch (option) {
-      case 'good':
-        setGood(prevState => prevState + 1);
-        break;
-
-      case 'neutral':
-        setNeutral(prevState => prevState + 1);
-        break;
-
-      case 'bad':
-        setBad(prevState => prevState + 1);
-        break;
-
-      default:
-        return;
-    }
+    setState({ ...state, [option]: state[option] + 1 });
   };
 
   const countTotalFeedback = () =>
-    [good, neutral, bad].reduce((acc, value) => acc + value, 0);
+    Object.values(state).reduce((acc, value) => acc + value, 0);
 
   const countPercentage = () =>
-    `${Math.round((good / countTotalFeedback()) * 100)}%`;
+    `${Math.round((state.good / countTotalFeedback()) * 100)}%`;
 
+  const options = Object.keys(state);
+  const total = countTotalFeedback();
+  const percent = countPercentage();
+  const statistics = Object.entries(state);
   return (
     <Container title="Reviews widget">
       <Section title="Please leave feedback">
-        <FeedbackOptions
-          options={['good', 'neutral', 'bad']}
-          onLeaveFeedback={setStatistics}
-        />
+        <FeedbackOptions options={options} onLeaveFeedback={setStatistics} />
       </Section>
 
       <Section title="Statistics">
-        {countTotalFeedback() ? (
+        {total > 0 && (
           <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={countTotalFeedback()}
-            positivePercentage={countPercentage()}
+            statistics={statistics}
+            total={total}
+            positivePercentage={percent}
           />
-        ) : (
-          <Notification message="No feedback given" />
         )}
+        {!total > 0 && <Notification message="No feedback given" />}
       </Section>
     </Container>
   );
